@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasks.db'
@@ -27,7 +28,7 @@ def complete_task(task_id):
     task = Task.query.get_or_404(task_id)
     task.completed = not task.completed
     db.session.commit()
-    return redirect('/')
+    return redirect(url_for('index'))
 
 @app.route('/delete-task/<int:task_id>', methods=['POST'])
 def delete_task(task_id):
@@ -43,3 +44,5 @@ def index():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+bootstrap = Bootstrap(app)

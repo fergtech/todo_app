@@ -1,19 +1,47 @@
-<form action="/add-task" method="post">
-    <input type="text" name="task" placeholder="Enter task" required>
-    <input type="submit" value="Add">
-</form>
+{% extends "bootstrap/base.html" %}
 
-{% for task in tasks %}
-<form action="/complete-task/{{ task.id }}" method="post">
-    <input type="checkbox" {% if task.completed %}checked{% endif %}>
-    <span {% if task.completed %}style="text-decoration:line-through;"{% endif %}>{{ task.name }}</span>
-    <input type="submit" value="Mark as completed">
-</form>
-{% endfor %}
-
-{% for task in tasks %}
-<form action="/delete-task/{{ task.id }}" method="post">
-    <span>{{ task.name }}</span>
-    <input type="submit" value="Delete">
-</form>
-{% endfor %}
+{% block content %}
+<div class="container mt-5">
+    <!-- Title Section -->
+    <div class="row justify-content-center mb-5">
+        <h1>To-Do App</h1>
+    </div>
+    <!-- Add Task Section -->
+    <div class="row justify-content-center">
+        <div class="col-md-6"> <!-- Controlled width by setting it to 6/12 of the container -->
+            <form method="post" action="/add-task" class="mb-4">
+                <div class="form-group">
+                    <label for="task">Task</label>
+                    <input type="text" class="form-control" id="task" name="task">
+                </div>
+                <button type="submit" class="btn btn-primary">Add Task</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Task Listing Section -->
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            {% for task in tasks %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <form action="/complete-task/{{ task.id }}" method="post" class="d-inline-block">
+                                <input type="checkbox" {% if task.completed %}checked{% endif %} onchange="this.form.submit();">
+                                <span {% if task.completed %}style="text-decoration:line-through;"{% endif %}>{{ task.name }}</span>
+                            </form>
+                        </div>
+                        <div>
+                            <form action="/delete-task/{{ task.id }}" method="post" class="d-inline-block ml-2">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
