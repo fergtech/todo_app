@@ -1,0 +1,19 @@
+<form action="/add-task" method="post">
+    <input type="text" name="task" placeholder="Enter task" required>
+    <input type="submit" value="Add">
+</form>
+
+{% for task in tasks %}
+<form action="/complete-task/{{ task.id }}" method="post">
+    <input type="checkbox" {% if task.completed %}checked{% endif %}>
+    <span {% if task.completed %}style="text-decoration:line-through;"{% endif %}>{{ task.name }}</span>
+    <input type="submit" value="Mark as completed">
+</form>
+{% endfor %}
+
+{% for task in tasks %}
+<form action="/delete-task/{{ task.id }}" method="post">
+    <span>{{ task.name }}</span>
+    <input type="submit" value="Delete">
+</form>
+{% endfor %}
