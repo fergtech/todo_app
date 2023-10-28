@@ -13,12 +13,16 @@ class Task(db.Model):
     name = db.Column(db.String(120), nullable=False)
     completed = db.Column(db.Boolean, default=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    due_date = db.Column(db.DateTime, nullable=True)
+
 
 
 @app.route('/add-task', methods=['POST'])
 def add_task():
     task_name = request.form.get('task')
-    new_task = Task(name=task_name, completed=False)
+    due_datetime_str = request.form.get('dueDateTime')
+    due_datetime = datetime.strptime(due_datetime_str, '%Y-%m-%dT%H:%M') if due_datetime_str else None
+    new_task = Task(name=task_name, completed=False, due_date=due_datetime)
     db.session.add(new_task)
     db.session.commit()
     return redirect('/')
